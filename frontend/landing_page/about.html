@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us • TradeWise</title>
+    <style>
+        :root {
+            --bg-primary: #050b1a;
+            --bg-secondary: #0b132b;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --accent: #2dd4bf;
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            background: radial-gradient(1200px 600px at top, #0b132b 0%, #050b1a 60%);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 40px;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            background: #2dd4bf;
+            color: black;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        .brand {
+            font-weight: 600;
+        }
+
+        nav a {
+            margin: 0 10px;
+            color: #94a3b8;
+        }
+
+        nav a.active {
+            color: white;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        .hero {
+            max-width: 720px;
+            margin-bottom: 80px;
+        }
+
+        .hero h1 {
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+            margin-bottom: 72px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 28px;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .card p {
+            font-size: 14.5px;
+            color: var(--text-secondary);
+        }
+
+        .values {
+            margin-top: 20px;
+        }
+
+        .values li {
+            list-style: none;
+            padding-left: 16px;
+            position: relative;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .values li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .mission {
+            max-width: 820px;
+            margin-bottom: 80px;
+        }
+
+        .mission h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .mission p {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 24px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        footer span {
+            color: var(--accent);
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">T</div>
+            <span class="brand">TradeWise</span>
+            <nav>
+                <a href="/home" style="text-decoration: none;">Home</a>
+                <a class="active">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>Built for long-term investors, not noise.</h1>
+            <p>
+                TradeWise is a modern investing and trading platform designed to make wealth-building simple,
+                transparent, and accessible for everyone. No clutter. No distractions. Just smart tools that help you
+                invest better.
+            </p>
+        </section>
+
+        <section class="mission">
+            <h2>Our mission</h2>
+            <p>
+                We believe that investing should be calm, informed, and data-driven — not driven by hype or fear.
+                TradeWise exists to empower individuals with clean insights, powerful analytics, and fair pricing so
+                they can make confident financial decisions over the long term.
+            </p>
+        </section>
+
+        <section class="section">
+            <div class="card">
+                <h3>Simple by design</h3>
+                <p>
+                    Our platform removes unnecessary complexity and focuses only on what matters — portfolio clarity,
+                    performance, and control. Every screen is designed with intent.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Transparent & honest</h3>
+                <p>
+                    No hidden fees. No confusing metrics. What you see is what you get. We believe transparency is
+                    the foundation of trust in financial products.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>Technology-first</h3>
+                <p>
+                    Built using modern web technologies and real-time data systems, TradeWise delivers speed,
+                    reliability, and security at every step of your investing journey.
+                </p>
+            </div>
+        </section>
+
+        <section class="mission">
+            <h2>Our values</h2>
+            <ul class="values">
+                <li>User-first thinking over short-term gains</li>
+                <li>Long-term wealth creation mindset</li>
+                <li>Minimalism, clarity, and focus</li>
+                <li>Continuous learning and improvement</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer>
+        © 2025 <span>TradeWise</span>. Built with clarity and conviction.
+    </footer>
+
+</body>
+
+</html>

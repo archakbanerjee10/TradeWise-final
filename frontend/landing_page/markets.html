@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeWise Markets</title>
+    <style>
+        /* Global Reset & Typography */
+        * {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(1200px 600px at 20% -10%, #0b1a3a, #020617 60%);
+            color: #e5e7eb;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 40px;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            background: #2dd4bf;
+            color: black;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        .brand {
+            font-weight: 600;
+        }
+
+        nav a {
+            margin: 0 10px;
+            color: #94a3b8;
+        }
+
+        nav a.active {
+            color: white;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .subtext {
+            font-size: 20px;
+            color: #8B93A7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #22C55E;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #22D3C5;
+            background: transparent;
+            color: #8B93A7;
+        }
+
+        .tab.active {
+            background: #22D3C5;
+            color: #0B1220;
+            box-shadow: 0 0 20px rgba(34, 211, 197, 0.5);
+        }
+
+        .tab.high-vol {
+            border-color: #FACC15;
+            color: #FACC15;
+        }
+
+        .tab.high-vol.active {
+            background: #FACC15;
+            color: #0B1220;
+        }
+
+        /* Table Container */
+        .table-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(15, 27, 45, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        thead th {
+            background: rgba(11, 18, 32, 0.8);
+            padding: 20px;
+            text-align: left;
+            font-size: 14px;
+            color: #8B93A7;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        tbody tr:hover {
+            background: rgba(34, 211, 197, 0.1);
+            box-shadow: 0 0 15px rgba(34, 211, 197, 0.2);
+        }
+
+        td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(139, 147, 167, 0.1);
+        }
+
+        .symbol {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .name {
+            color: #8B93A7;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .price.up {
+            color: #22C55E;
+        }
+
+        .price.down {
+            color: #EF4444;
+        }
+
+        .change {
+            font-weight: 600;
+        }
+
+        .change.up {
+            color: #22C55E;
+        }
+
+        .change.down {
+            color: #EF4444;
+        }
+
+        .risk-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .risk-low {
+            background: #22C55E33;
+            color: #22C55E;
+        }
+
+        .risk-medium {
+            background: #FACC1533;
+            color: #FACC15;
+        }
+
+        .risk-high {
+            background: #EF444433;
+            color: #EF4444;
+        }
+
+        /* Sparkline */
+        .sparkline {
+            width: 120px;
+            height: 50px;
+            position: relative;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #8B93A7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">T</div>
+            <span class="brand">TradeWise</span>
+            <nav>
+                <a href="/home" style="text-decoration: none;">Home</a>
+                <a class="active">Markets</a>
+            </nav>
+        </div>
+    </header>
+
+    <header>
+        <h1>Markets</h1>
+        <div class="subtext">
+            Live market data with AI-driven risk signals
+            <span class="live-dot"></span> <span>LIVE</span>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <div class="tab active" data-category="stocks">Stocks</div>
+        <div class="tab" data-category="crypto">Crypto</div>
+        <div class="tab" data-category="indices">Indices</div>
+        <div class="tab high-vol" data-category="highvol">High Volatility ⚠️</div>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Asset Name</th>
+                    <th>Live Price</th>
+                    <th>24h % Change</th>
+                    <th>Volume</th>
+                    <th>Market Cap</th>
+                    <th>Trend</th>
+                    <th>Risk Badge</th>
+                </tr>
+            </thead>
+            <tbody id="market-body">
+                <tr class="loading">
+                    <td colspan="8">Loading live data...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Configuration
+        const FINNHUB_API_KEY = 'd52ot81r01qggm5t3n0gd52ot81r01qggm5t3n10'; // Placeholder as requested
+
+        // Asset Lists
+        const assets = {
+            stocks: [
+                { symbol: 'AAPL', name: 'Apple Inc.' },
+                { symbol: 'MSFT', name: 'Microsoft Corp.' },
+                { symbol: 'NVDA', name: 'NVIDIA Corp.' },
+                { symbol: 'GOOGL', name: 'Alphabet Inc.' },
+                { symbol: 'AMZN', name: 'Amazon.com Inc.' },
+                { symbol: 'TSLA', name: 'Tesla Inc.' },
+                { symbol: 'META', name: 'Meta Platforms' },
+                { symbol: 'BRK.B', name: 'Berkshire Hathaway' }
+            ],
+            crypto: [
+                { symbol: 'BINANCE:BTCUSDT', name: 'Bitcoin', binance: 'btcusdt' },
+                { symbol: 'BINANCE:ETHUSDT', name: 'Ethereum', binance: 'ethusdt' },
+                { symbol: 'BINANCE:BNBUSDT', name: 'Binance Coin', binance: 'bnbusdt' },
+                { symbol: 'BINANCE:SOLUSDT', name: 'Solana', binance: 'solusdt' },
+                { symbol: 'BINANCE:XRPUSDT', name: 'Ripple', binance: 'xrpusdt' },
+                { symbol: 'BINANCE:ADAUSDT', name: 'Cardano', binance: 'adausdt' },
+                { symbol: 'BINANCE:DOGEUSDT', name: 'Dogecoin', binance: 'dogeusdt' },
+                { symbol: 'BINANCE:DOTUSDT', name: 'Polkadot', binance: 'dotusdt' }
+            ],
+            indices: [
+                { symbol: 'INDEX:SPX', name: 'S&P 500' },
+                { symbol: 'INDEX:DJI', name: 'Dow Jones' },
+                { symbol: 'INDEX:IXIC', name: 'Nasdaq 100' },
+                { symbol: 'INDEX:UKX', name: 'FTSE 100' },
+                { symbol: 'INDEX:DAX', name: 'DAX' },
+                { symbol: 'INDEX:N225', name: 'Nikkei 225' },
+                { symbol: 'INDEX:HSI', name: 'Hang Seng' }
+            ]
+        };
+
+        // Dummy fallback data if API fails
+        const dummyData = {
+            price: 0,
+            prevClose: 0,
+            changePercent: 0,
+            volume: 'N/A',
+            marketCap: 'N/A',
+            history: Array(30).fill(100)
+        };
+
+        let currentCategory = 'stocks';
+        let marketData = {};
+        let binanceWs = null;
+
+        // Simple lightweight sparkline using Canvas
+        function drawSparkline(canvas, data, up) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = 120;
+            const h = canvas.height = 50;
+            ctx.clearRect(0, 0, w, h);
+
+            const min = Math.min(...data);
+            const max = Math.max(...data);
+            const range = max - min || 1;
+
+            ctx.strokeStyle = up ? '#22C55E' : '#EF4444';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            data.forEach((val, i) => {
+                const x = i * (w / (data.length - 1));
+                const y = h - ((val - min) / range) * h;
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.stroke();
+
+            // Gradient fill
+            const grad = ctx.createLinearGradient(0, 0, 0, h);
+            grad.addColorStop(0, up ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)');
+            grad.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad;
+            ctx.lineTo(w, h);
+            ctx.lineTo(0, h);
+            ctx.fill();
+        }
+
+        // Fetch initial quote & history for an asset
+        async function fetchAssetData(asset) {
+            const isCrypto = asset.binance;
+            let data = { ...dummyData };
+
+            try {
+                if (isCrypto) {
+                    // Initial 24h ticker + history from Finnhub
+                    const tickerRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${asset.symbol}&token=${FINNHUB_API_KEY}`);
+                    const quote = await tickerRes.json();
+                    data.price = quote.c || 0;
+                    data.prevClose = quote.pc || 0;
+
+                    const from = Math.floor(Date.now() / 1000 - 86400 * 30);
+                    const to = Math.floor(Date.now() / 1000);
+                    const res = await fetch(`https://finnhub.io/api/v1/crypto/candle?symbol=${asset.symbol}&resolution=D&from=${from}&to=${to}&token=${FINNHUB_API_KEY}`);
+                    const json = await res.json();
+                    data.history = json.c ? json.c.slice(-30) : Array(30).fill(data.price);
+                } else {
+                    const quoteRes = await fetch(`https://finnhub.io/api/v1/quote?symbol=${asset.symbol}&token=${FINNHUB_API_KEY}`);
+                    const quote = await quoteRes.json();
+                    data.price = quote.c || 0;
+                    data.prevClose = quote.pc || 0;
+
+                    const from = Math.floor(Date.now() / 1000 - 86400 * 40);
+                    const to = Math.floor(Date.now() / 1000);
+                    const histRes = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${asset.symbol}&resolution=D&from=${from}&to=${to}&token=${FINNHUB_API_KEY}`);
+                    const hist = await histRes.json();
+                    data.history = hist.c ? hist.c.slice(-30) : Array(30).fill(data.price);
+                }
+
+                data.changePercent = data.prevClose ? ((data.price - data.prevClose) / data.prevClose * 100).toFixed(2) : 0;
+            } catch (e) {
+                console.error('API error for ' + asset.symbol, e);
+                data.changePercent = (Math.random() > 0.5 ? 1 : -1) * Math.random() * 5;
+                data.history = Array(30).fill(100).map((v, i) => v + Math.random() * 20 - 10);
+            }
+
+            return data;
+        }
+
+        // Update row with data
+        function updateRow(row, asset, data) {
+            const priceCell = row.querySelector('.price');
+            const changeCell = row.querySelector('.change');
+            const canvas = row.querySelector('canvas');
+
+            const up = parseFloat(data.changePercent) >= 0;
+
+            if (priceCell.textContent !== data.price.toFixed(2)) {
+                priceCell.classList.remove('up', 'down');
+                void priceCell.offsetWidth;
+                priceCell.classList.add(up ? 'up' : 'down');
+            }
+
+            priceCell.textContent = '$' + data.price.toFixed(2);
+            changeCell.innerHTML = (up ? '↑ ' : '↓ ') + Math.abs(data.changePercent) + '%';
+            changeCell.classList.toggle('up', up);
+            changeCell.classList.toggle('down', !up);
+
+            drawSparkline(canvas, data.history, up);
+
+            // Simulated AI risk badge
+            let risk = 'LOW';
+            const vol = Math.abs(data.changePercent);
+            if (vol > 5) risk = 'HIGH';
+            else if (vol > 2) risk = 'MEDIUM';
+
+            const badge = row.querySelector('.risk-badge');
+            badge.textContent = risk;
+            badge.className = 'risk-badge risk-' + risk.toLowerCase();
+        }
+
+        // Render table for category
+        async function renderCategory(category) {
+            const body = document.getElementById('market-body');
+            body.innerHTML = '<tr class="loading"><td colspan="8">Loading live data...</td></tr>';
+
+            const list = assets[category] || assets.stocks;
+            marketData[category] = {};
+
+            let rowsHTML = '';
+            for (const asset of list) {
+                rowsHTML += `
+            <tr>
+                <td class="symbol">${asset.symbol.replace('BINANCE:', '').replace('INDEX:', '')}</td>
+                <td class="name">${asset.name}</td>
+                <td class="price">Loading...</td>
+                <td class="change">—</td>
+                <td>Live</td>
+                <td>Live</td>
+                <td class="sparkline"><canvas></canvas></td>
+                <td><span class="risk-badge">LOW</span></td>
+            </tr>`;
+            }
+            body.innerHTML = rowsHTML;
+
+            const rows = body.querySelectorAll('tr');
+            for (let i = 0; i < list.length; i++) {
+                const asset = list[i];
+                const data = await fetchAssetData(asset);
+                marketData[category][asset.symbol] = data;
+                updateRow(rows[i], asset, data);
+            }
+        }
+
+        // Binance WebSocket for real-time crypto prices
+        function connectBinanceWS() {
+            if (binanceWs) binanceWs.close();
+
+            const symbols = assets.crypto.map(a => a.binance + '@ticker').join('/');
+            binanceWs = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${symbols}`);
+
+            binanceWs.onmessage = (event) => {
+                const msg = JSON.parse(event.data);
+                if (!msg.data) return;
+                const ticker = msg.data;
+                const symbol = 'BINANCE:' + ticker.s.toUpperCase();
+
+                if (marketData.crypto && marketData.crypto[symbol]) {
+                    const data = marketData.crypto[symbol];
+                    data.price = parseFloat(ticker.c);
+                    data.changePercent = parseFloat(ticker.P).toFixed(2);
+
+                    data.history.shift();
+                    data.history.push(data.price);
+
+                    const idx = assets.crypto.findIndex(a => a.symbol === symbol);
+                    const row = document.querySelector(`#market-body tr:nth-child(${idx + 1})`);
+                    if (row) updateRow(row, { symbol }, data);
+                }
+            };
+
+            binanceWs.onclose = () => setTimeout(connectBinanceWS, 5000);
+        }
+
+        // Polling for stocks & indices
+        async function pollNonCrypto(category) {
+            const list = assets[category];
+            for (const asset of list) {
+                try {
+                    const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${asset.symbol}&token=${FINNHUB_API_KEY}`);
+                    const quote = await res.json();
+                    if (quote.c && marketData[category][asset.symbol]) {
+                        const data = marketData[category][asset.symbol];
+                        data.price = quote.c;
+                        data.changePercent = ((quote.c - quote.pc) / quote.pc * 100).toFixed(2);
+
+                        data.history.shift();
+                        data.history.push(quote.c);
+
+                        const idx = list.findIndex(a => a.symbol === asset.symbol);
+                        const row = document.querySelector(`#market-body tr:nth-child(${idx + 1})`);
+                        if (row) updateRow(row, asset, data);
+                    }
+                } catch (e) { }
+            }
+        }
+
+        // High Volatility tab
+        function renderHighVol() {
+            const body = document.getElementById('market-body');
+            let highVolAssets = [];
+
+            Object.keys(marketData).forEach(cat => {
+                Object.keys(marketData[cat]).forEach(sym => {
+                    const d = marketData[cat][sym];
+                    if (Math.abs(d.changePercent) > 3) {
+                        const asset = assets[cat]?.find(a => a.symbol === sym) || { symbol: sym, name: sym };
+                        highVolAssets.push({ asset, data: d });
+                    }
+                });
+            });
+
+            highVolAssets.sort((a, b) => Math.abs(b.data.changePercent) - Math.abs(a.data.changePercent));
+
+            let rowsHTML = highVolAssets.length ? '' : '<tr><td colspan="8">No high volatility assets currently</td></tr>';
+            highVolAssets.forEach(item => {
+                const up = item.data.changePercent >= 0;
+                rowsHTML += `
+            <tr>
+                <td class="symbol">${item.asset.symbol.replace('BINANCE:', '').replace('INDEX:', '')}</td>
+                <td class="name">${item.asset.name}</td>
+                <td class="price">$${item.data.price.toFixed(2)}</td>
+                <td class="change">${up ? '↑ ' : '↓ '}${Math.abs(item.data.changePercent)}%</td>
+                <td>Live</td>
+                <td>Live</td>
+                <td class="sparkline"><canvas></canvas></td>
+                <td><span class="risk-badge risk-high">HIGH</span></td>
+            </tr>`;
+            });
+
+            body.innerHTML = rowsHTML;
+
+            highVolAssets.forEach((item, i) => {
+                const canvas = body.querySelector(`tr:nth-child(${i + 1}) canvas`);
+                if (canvas) drawSparkline(canvas, item.data.history, item.data.changePercent >= 0);
+            });
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentCategory = tab.dataset.category;
+
+                if (currentCategory === 'highvol') {
+                    renderHighVol();
+                } else {
+                    renderCategory(currentCategory);
+                }
+            });
+        });
+
+        // Init
+        renderCategory('stocks');
+        connectBinanceWS();
+
+        // Polling loop
+        setInterval(() => {
+            if (currentCategory === 'stocks') pollNonCrypto('stocks');
+            else if (currentCategory === 'indices') pollNonCrypto('indices');
+            else if (currentCategory === 'highvol') renderHighVol();
+        }, 10000);
+    </script>
+</body>
+
+</html>

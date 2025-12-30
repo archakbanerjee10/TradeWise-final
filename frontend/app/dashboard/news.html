@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TradeWise | TruthLens</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, system-ui, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #0f172a, #020617);
+            color: #e5e7eb;
+        }
+
+        .topbar {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, #0b1530, #050b1b);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 40px;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            background: #2dd4bf;
+            color: black;
+            font-weight: bold;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+
+        .brand {
+            font-weight: 600;
+        }
+
+        nav a {
+            margin: 0 10px;
+            color: #94a3b8;
+        }
+
+        nav a.active {
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .nav-right input {
+            background: #020617;
+            border: 1px solid #1e293b;
+            padding: 8px 12px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .avatar {
+            background: #2dd4bf;
+            color: black;
+            padding: 8px 12px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">T</div>
+            <span class="brand">TradeWise</span>
+            <nav>
+  <a href="/dashboard" style="text-decoration: none;">Dashboard</a>
+
+  <a href="/dashboard/portfolio" style="text-decoration: none;">
+    Portfolio
+  </a>
+
+  <a href="/dashboard/markets" style="text-decoration: none;">
+    Markets
+  </a>
+
+  <a href="/dashboard/funds" style="text-decoration: none;">
+    Funds
+  </a>
+
+  <a href="/dashboard/orders" style="text-decoration: none;">
+    Orders
+  </a>
+
+  <a  class="active">
+    News
+  </a>
+
+  <a href="/dashboard/support" style="text-decoration: none;">
+    Support
+  </a>
+</nav>
+
+        </div>
+
+        <div class="nav-right">
+            <input placeholder="Search assets..." />
+        </div>
+    </header>
+</body>
+
+</html>

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIP Calculator</title>
+    <style>
+        :root {
+            --primary-blue: #387ed1;
+            --text-dark: #444;
+            --bg-light: #f9f9f9;
+        }
+
+        body {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            background-color: #fff;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .calculator-container {
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        header {
+            background: var(--bg-navbar);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: var(--accent-primary);
+            font-size: 20px;
+        }
+
+        nav a {
+            color: #9ca3af;
+            margin-left: 20px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: #2DD4BF;
+        }
+
+        .pricing-hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .inputs-section {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .results-section {
+            flex: 1;
+            min-width: 300px;
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: right;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .result-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .total-value {
+            font-size: 32px;
+            color: var(--primary-blue);
+            margin-top: 10px;
+        }
+
+        /* Chart Placeholder (Simplistic representation) */
+        .chart-container {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: flex;
+        }
+
+        #invested-bar {
+            background: #444;
+            width: 50%;
+            height: 100%;
+        }
+
+        #returns-bar {
+            background: var(--primary-blue);
+            width: 50%;
+            height: 100%;
+        }
+
+        .footer {
+            background: #fafafa;
+            padding: 50px 30px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .footer-section a:hover {
+            color: #387ed1;
+        }
+
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+
+        .footer-logo img {
+            height: 18px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .disclaimer {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 30px;
+            margin-top: 40px;
+            font-size: 11px;
+            color: #999;
+            line-height: 1.8;
+        }
+
+        .help-icon {
+            color: #387ed1;
+            cursor: help;
+            text-decoration: none;
+        }
+
+
+        .footer-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #387ed1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #f2f4f6;
+            letter-spacing: 0.5px;
+        }
+
+        .copyright {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #387ed1;
+        }
+
+        .social-icons svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .icon-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .terms {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+
+        .signup-container {
+            padding: 10px;
+            text-align: center;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+
+        :root {
+            --bg-main: #0b1220;
+            --bg-card: #0f172a;
+            --bg-soft: #111827;
+            --border-soft: #1f2937;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --accent: #38bdf8;
+            --accent-soft: #0ea5e9;
+        }
+
+        /* Body background */
+        body {
+            background: linear-gradient(180deg, #0b1220, #020617);
+            color: var(--text-main);
+        }
+
+        /* Main container */
+        .calculator-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Headings */
+        h1 {
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+        }
+
+        /* Input section */
+        .input-group span {
+            color: var(--text-muted);
+        }
+
+        input[type="number"] {
+            background: var(--bg-soft);
+            border: 1px solid var(--border-soft);
+            color: var(--accent);
+        }
+
+        /* Range sliders */
+        input[type="range"] {
+            accent-color: var(--accent);
+        }
+
+        /* Results section */
+        .results-section {
+            background: linear-gradient(180deg, #0f172a, #020617);
+            border: 1px solid var(--border-soft);
+        }
+
+        /* Result text */
+        .result-label {
+            color: var(--text-muted);
+        }
+
+        .result-value {
+            color: var(--text-main);
+        }
+
+        .total-value {
+            color: var(--accent);
+        }
+
+        /* Chart bar */
+        .chart-container {
+            background: #020617;
+        }
+
+        #invested-bar {
+            background: #334155;
+        }
+
+        #returns-bar {
+            background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+        }
+
+        /* Footer / Terms section */
+        .terms {
+            background: #020617;
+            color: var(--text-muted);
+        }
+
+        .logo-text {
+            color: var(--text-main);
+        }
+
+        /* Social icons */
+        .social-icons a {
+            color: var(--text-muted);
+        }
+
+        .social-icons a:hover {
+            color: var(--accent);
+        }
+
+        /* Paragraph text */
+        p {
+            color: var(--text-muted);
+        }
+
+        /* Smooth transitions */
+        * {
+            transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+        }
+
+        .navi {
+            display: flex;
+            margin: 0;
+            padding-top: 5px;
+            padding-left: 50px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            justify-content: flex-start;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header always at top */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #020617;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        /* Main content takes remaining space */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 40px;
+        }
+
+        /* Footer strictly at bottom */
+        footer.terms {
+            margin-top: auto;
+            background: #020617;
+            padding: 60px 20px;
+        }
+
+        /* Long disclaimer text */
+        footer.terms p {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            font-size: 11px;
+            line-height: 1.8;
+            color: #9ca3af;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 350px;
+        }
+
+        nav a.active {
+            color: #2DD4BF;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>TradeWise</h1>
+        <nav>
+            <a href="/home">Home</a>
+            <a class="active">SIP Calculator</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <div class="calculator-container">
+            <h1>SIP Calculator</h1>
+            <p class="subtitle">Calculate how much you can accumulate by investing small amounts periodically.</p>
+
+            <div class="flex-row">
+                <div class="inputs-section">
+                    <div class="input-group">
+                        <div class="label-row">
+                            <span>Monthly investment</span>
+                            <span>₹ <input type="number" id="monthly-input" value="10000" step="500"></span>
+                        </div>
+                        <input type="range" id="monthly-slider" min="500" max="1000000" step="500" value="10000">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="label-row">
+                            <span>Expected return rate (p.a)</span>
+                            <span><input type="number" id="rate-input" value="12" step="0.1"> %</span>
+                        </div>
+                        <input type="range" id="rate-slider" min="1" max="30" step="0.1" value="12">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="label-row">
+                            <span>Time period</span>
+                            <span><input type="number" id="years-input" value="10"> Yr</span>
+                        </div>
+                        <input type="range" id="years-slider" min="1" max="40" step="1" value="10">
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <div class="result-item">
+                        <div class="result-label">Invested amount</div>
+                        <div class="result-value" id="display-invested">₹ 12,00,000</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Est. returns</div>
+                        <div class="result-value" id="display-returns">₹ 11,23,391</div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div id="invested-bar"></div>
+                        <div id="returns-bar"></div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label">Total value</div>
+                        <div class="total-value" id="display-total">₹ 23,23,391</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <script>
+        const monthlySlider = document.getElementById('monthly-slider');
+        const monthlyInput = document.getElementById('monthly-input');
+        const rateSlider = document.getElementById('rate-slider');
+        const rateInput = document.getElementById('rate-input');
+        const yearsSlider = document.getElementById('years-slider');
+        const yearsInput = document.getElementById('years-input');
+
+        const displayInvested = document.getElementById('display-invested');
+        const displayReturns = document.getElementById('display-returns');
+        const displayTotal = document.getElementById('display-total');
+        const investedBar = document.getElementById('invested-bar');
+
+        function formatCurrency(num) {
+            return "₹ " + Math.round(num).toLocaleString('en-IN');
+        }
+
+        function calculateSIP() {
+            const P = parseFloat(monthlyInput.value);
+            const annualRate = parseFloat(rateInput.value);
+            const years = parseFloat(yearsInput.value);
+
+            const i = (annualRate / 100) / 12;
+            const n = years * 12;
+
+            // SIP Formula: FV = P × [{(1 + i)^n - 1} / i] × (1 + i)
+            const futureValue = P * ((Math.pow(1 + i, n) - 1) / i) * (1 + i);
+            const totalInvested = P * n;
+            const estReturns = futureValue - totalInvested;
+
+            displayInvested.innerText = formatCurrency(totalInvested);
+            displayReturns.innerText = formatCurrency(estReturns);
+            displayTotal.innerText = formatCurrency(futureValue);
+
+            // Update visual bar breakdown
+            const investedPercent = (totalInvested / futureValue) * 100;
+            investedBar.style.width = investedPercent + "%";
+        }
+
+        // Link Sliders and Inputs
+        function setupSync(slider, input) {
+            slider.oninput = () => { input.value = slider.value; calculateSIP(); };
+            input.oninput = () => { slider.value = input.value; calculateSIP(); };
+        }
+
+        setupSync(monthlySlider, monthlyInput);
+        setupSync(rateSlider, rateInput);
+        setupSync(yearsSlider, yearsInput);
+
+        // Initial calculation
+        calculateSIP();
+    </script>
+
+    <footer class="terms">
+        <div class="footer-container">
+            <div class="logo-section">
+
+                <div class="logo-text">TradeWise</div>
+            </div>
+
+            <p class="copyright">
+                © 2010 - 2025, TradeWise Broking Ltd.<br>
+                All rights reserved.
+            </p>
+
+            <div class="social-icons">
+                <div class="icon-row">
+                    <a href="#" aria-label="X (Twitter)">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="icon-row">
+                    <a href="#" aria-label="YouTube">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="WhatsApp">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Telegram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <p>TradeWise Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI Registration no.: INZ000031633 CDSL/NSDL:
+            Depository services through Zerodha Broking Ltd. – SEBI Registration no.: IN-DP-431-2019 Registered Address:
+            Zerodha Broking Ltd., #153/154, 4th Cross, Dollars Colony, Opp. Clarence Public School, J.P Nagar 4th Phase,
+            Bengaluru - 560078, Karnataka, India. For any complaints pertaining to securities broking please write to
+            complaints@zerodha.com, for DP related to dp@zerodha.com. Please ensure you carefully read the Risk
+            Disclosure Document as prescribed by SEBI | ICF<br>
+
+            Procedure to file a complaint on SEBI SCORES: Register on SCORES portal. Mandatory details for filing
+            complaints on SCORES: Name, PAN, Address, Mobile Number, E-mail ID. Benefits: Effective Communication,
+            Speedy redressal of the grievances<br>
+
+            Smart Online Dispute Resolution | Grievances Redressal Mechanism<br>
+
+            Investments in securities market are subject to market risks; read all the related documents carefully
+            before investing.<br>
+
+            Attention investors: 1) Stock brokers can accept securities as margins from clients only by way of pledge in
+            the depository system w.e.f September 01, 2020. 2) Update your e-mail and phone number with your stock
+            broker / depository participant and receive OTP directly from depository on your e-mail and/or mobile number
+            to create pledge. 3) Check your securities / MF / bonds in the consolidated account statement issued by
+            NSDL/CDSL every month.<br>
+
+            India's largest broker based on networth as per NSE. NSE broker factsheet<br>
+
+            "Prevent unauthorised transactions in your account. Update your mobile numbers/email IDs with your stock
+            brokers. Receive information of your transactions directly from Exchange on your mobile/email at the end of
+            the day. Issued in the interest of investors. KYC is one time exercise while dealing in securities markets -
+            once KYC is done through a SEBI registered intermediary (broker, DP, Mutual Fund etc.), you need not undergo
+            the same process again when you approach another intermediary." Dear Investor, if you are subscribing to an
+            IPO, there is no need to issue a cheque. Please write the Bank account number and sign the IPO application
+            form to authorize your bank to make payment in case of allotment. In case of non allotment the funds will
+            remain in your bank account. As a business we don't give stock tips, and have not authorized anyone to trade
+            on behalf of others. If you find anyone claiming to be part of Zerodha and offering such services, please
+            create a ticket here.<br>
+
+            *Customers availing insurance advisory services offered by Ditto (Tacterial Consulting Private Limited |
+            IRDAI Registered Corporate Agent (Composite) License No CA0738) will not have access to the exchange
+            investor grievance redressal forum, SEBI SCORES/ODR, or arbitration mechanism for such products.</p>
+    </footer>
+
+</body>
+
+</html>

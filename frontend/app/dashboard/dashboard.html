@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>TradeWise | Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      color: #e5e7eb;
+    }
+
+    .topbar {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #0b1530, #050b1b);
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 18px 40px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      background: #2dd4bf;
+      color: black;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 10px;
+    }
+
+    .brand {
+      font-weight: 600;
+    }
+
+    nav a {
+      margin: 0 10px;
+      color: #94a3b8;
+    }
+
+    nav a.active {
+      color: white;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .nav-right input {
+      background: #020617;
+      border: 1px solid #1e293b;
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: white;
+    }
+
+   .logout-btn {
+  background: linear-gradient(135deg, #4f9cff, #2b6fff);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 20px rgba(43, 111, 255, 0.35);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #2b6fff, #1f57d6);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(43, 111, 255, 0.45);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 14px rgba(43, 111, 255, 0.35);
+}
+
+
+    main {
+      padding: 36px 40px;
+    }
+
+    h1 span {
+      color: #2dd4bf;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      margin-bottom: 28px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(180deg, #020617, #020617cc);
+      border: 1px solid #1e293b;
+      padding: 22px;
+      border-radius: 16px;
+    }
+
+    .stat-card p {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .stat-card h2 {
+      margin: 10px 0;
+    }
+
+    .stat-card span {
+      border-radius: 7px;
+      padding: 2px 4px;
+      border-color: #22c55e;
+      background-color: lch(52.07% 3.52 199.14 / 0.5);
+    }
+
+    .positive {
+      color: #22c55e;
+    }
+
+    .negative {
+      color: #e64444;
+    }
+
+    .middle {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    .card {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .chart-card {
+      height: px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .filters span {
+      margin-left: 10px;
+      color: #94a3b8;
+    }
+
+    .filters .active {
+      color: black;
+      background: #2dd4bf;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .watchlist .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .watchlist .item span p {
+      color: #94a3b8;
+    }
+
+    .bottom {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-top: 28px;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 14px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      margin-left: 200px;
+      padding: 14px 8px;
+      border-bottom: 1px solid #1e293b;
+      text-align: center;
+    }
+
+    th {
+      color: #94a3b8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .buy td {
+      color: #2dd4bf;
+    }
+
+    .sell td {
+      color: #6c44ef;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      height: 125px;
+    }
+
+    .actions button {
+      padding: 18px;
+      border-radius: 250px;
+      border: none;
+      background: #020617;
+      color: white;
+      border: 1px solid #1e293b;
+
+    }
+
+    .actions .buy {
+      background: #2dd4bf;
+      color: white;
+      height: 72px;
+      font-size: 14px;
+    }
+
+    .actions .sell {
+      background-color: #6c44ef;
+      color: white;
+      height: 72px;
+      font-size: 14px;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="nav-left">
+      <div class="logo">T</div>
+      <span class="brand">TradeWise</span>
+      <nav>
+  <a class="active">Dashboard</a>
+
+  <a href="/dashboard/portfolio" style="text-decoration: none;">
+    Portfolio
+  </a>
+  <a href="/dashboard/markets" style="text-decoration: none;">
+    Markets
+  </a>
+  <a href="/dashboard/funds" style="text-decoration: none;">
+    Funds</a>
+  <a href="/dashboard/orders" style="text-decoration: none;">
+    Orders
+  </a>
+  <a href="/dashboard/news" style="text-decoration: none;">
+    News
+  </a>
+  <a href="/dashboard/support" style="text-decoration: none;">
+    Support
+  </a>
+</nav>
+
+    </div>
+     
+    <div class="nav-right">
+      <input placeholder="Search assets..." />
+    </div>
+    <button id="logoutBtn" class="logout-btn">Logout</button>
+
+  </header>
+
+  <main>
+    <h1>Welcome  </h1>
+    <p id="user"></p>
+    <p class="subtitle">Here's what's happening with your portfolio today.</p>
+
+    <section class="stats">
+      <div class="stat-card">
+        <p>Portfolio Value</p>
+        <h2>1,24,563.00 INR</h2>
+        <span class="positive">↗ +12.50%</span>
+      </div>
+
+      <div class="stat-card">
+        <p>Today's Gain</p>
+        <h2>2,847.32 INR</h2>
+        <span class="positive">↗ +2.34%</span>
+      </div>
+
+      <div class="stat-card">
+        <p>Total Assets</p>
+        <h2>24</h2>
+      </div>
+
+      <div class="stat-card">
+        <p>24h Volume</p>
+        <h2>18,234.50 INR</h2>
+        <span class="negative">↘ -0.82%</span>
+      </div>
+    </section>
+
+    <section class="middle">
+      <div class="card chart-card">
+        <div class="card-header">
+          <h3>Portfolio Performance</h3>
+          <div class="filters">
+            <span>1D</span><span>1W</span><span>1M</span>
+            <span class="active">1Y</span><span>ALL</span>
+          </div>
+        </div>
+        <canvas id="chart"></canvas>
+      </div>
+
+      <div class="card watchlist">
+        <div>
+          <h3>Watchlist</h3>
+        </div>
+        <div class="item" onclick="trade('BTC', 7921.45)"><span>BTC<p>Bitcoin</p></span><span class="positive">7,921.45 INR <p>↗ +2.95%</p></span></div>
+        <div class="item" onclick="trade('ETH', 2284.12)"><span>ETH<p>Ethereum</p></span><span class="negative">2,284.12 INR <p>↘ -4.19%</p></span>
+        </div>
+        <div class="item" onclick="trade('REL', 1568.80)"><span>REL<p>Reliance Industries Ltd</p></span><span class="positive">1,568.80 INR <p>↗ +1.56%
+            </p></span></div>
+        <div class="item" onclick="trade('TSLA', 248.50)"><span>TSLA<p>Tesla</p></span><span class="positive">248.50 INR <p>↗ +3.45%</p></span></div>
+        <div class="item" onclick="trade('TATA', 325.50)"><span>TATA<p>Tata Steel Ltd</p></span><span class="positive">325.50 INR <p>↗ +0.23%</p></span>
+        </div>
+        <div class="item" onclick="trade('OLA', 325.50)"><span>OLA<p>Ola Electric Mobility</p></span><span class="negative">325.50 INR <p>↘ -3.45%</p>
+          </span></div>
+      </div>
+    </section>
+
+    <section class="bottom">
+      <div class="card">
+        <h3>Recent Trades</h3>
+        <table>
+          <tr>
+            <td>Actions</td>
+            <td>Asset</td>
+            <td>Amount</td>
+            <td>Price</td>
+            <td>Time</td>
+          </tr>
+          <tr class="buy">
+            <td>Buy</td>
+            <td>BTC</td>
+            <td>0.125</td>
+            <td>43,250 INR</td>
+            <td>2 min ago</td>
+          </tr>
+          <tr class="sell">
+            <td>Sell</td>
+            <td>ETH</td>
+            <td>2.5</td>
+            <td>2,290 INR</td>
+            <td>15 min ago</td>
+          </tr>
+          <tr class="buy">
+            <td>Buy</td>
+            <td>NVDA</td>
+            <td>10</td>
+            <td>492 INR</td>
+            <td>1 hour ago</td>
+          </tr>
+          <tr class="buy">
+            <td>Buy</td>
+            <td>SOL</td>
+            <td>15</td>
+            <td>97 INR</td>
+            <td>3 hour ago</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card actions">
+        <button id="buyBtn" class="buy">Buy</button>
+        <button id="sellBtn" class="sell">Sell</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const ctx = document.getElementById("chart");
+
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [{
+          data: [30000, 34000, 32000, 38000, 36000, 42000, 41000, 45000, 47000, 49000, 52000, 58000],
+          borderColor: "#2dd4bf",
+          backgroundColor: "rgba(45,212,191,0.15)",
+          fill: true,
+          tension: 0.4,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: "#64748b" }, grid: { display: false } },
+          y: { ticks: { color: "#64748b" }, grid: { color: "#1e293b" } }
+        }
+      }
+    });
+
+   let tradeMode = "BUY";
+
+document.getElementById("buyBtn").addEventListener("click", () => {
+  tradeMode = "BUY";
+  alert("Buy mode activated");
+});
+
+document.getElementById("sellBtn").addEventListener("click", () => {
+  tradeMode = "SELL";
+  alert("Sell mode activated");
+});
+function trade(stock, price) {
+    fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        stock: stock,
+        price: price,
+        quantity: 1,
+        type: tradeMode
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert(`${data.type} order placed for ${data.stock}`);
+    });
+  }
+  
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("user");
+      window.location.href = "/home";
+    });
+  }
+
+
+  </script>
+
+</body>
+
+</html>

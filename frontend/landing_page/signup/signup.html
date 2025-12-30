@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login / Signup</title>
+ <style>
+  * {
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0f172a;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 340px;
+}
+
+.card {
+  background: #111827;
+  padding: 25px;
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 0 30px rgba(0,255,255,0.1);
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: #22d3ee;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #06b6d4;
+}
+
+.phone-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.code {
+  background: #1f2933;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.hidden {
+  display: none;
+}
+
+#otp-msg {
+  text-align: center;
+  margin-bottom: 10px;
+}
+ </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LANDING BUTTONS -->
+<div id="landing" class="card">
+  <h2>Welcome</h2>
+  <button onclick="openSignup()">Sign Up</button>
+  <br><br>
+  <button onclick="openLogin()">Login</button>
+  <p>*If you are already registered go to Login</p>
+</div>
+
+  <!-- STEP 1: MOBILE -->
+  <div id="step-mobile" class="card hidden">
+    <button class="back-btn" onclick="goBack('landing')">← Back</button>
+    <h2>Login / Sign up</h2>
+
+    <div class="phone-box">
+      <span class="code">+91</span>
+      <input type="tel" id="mobile" placeholder="Enter mobile number" maxlength="10">
+    </div>
+
+    <button onclick="sendOTP()">Continue</button>
+  </div>
+
+  <!-- STEP 2: OTP -->
+  <div id="step-otp" class="card hidden">
+     <button class="back-btn" onclick="goBack('landing')">>← Back</button>
+    <h2>Enter OTP</h2>
+
+    <input type="number" id="otp" placeholder="Enter OTP">
+    <p id="otp-msg"></p>
+
+    <p>*Dummy OTP, enter-756924</p>
+
+    <button onclick="verifyOTP()">Verify OTP</button>
+  </div>
+
+  <!-- STEP 3: SIGNUP -->
+  <div id="step-signup" class="card hidden">
+     <button class="back-btn" onclick="goBack('step-mobile')">← Back</button>
+    <h2>Create Account</h2>
+
+    <input type="text" id="fname" placeholder="First Name">
+    <input type="text" id="lname" placeholder="Last Name">
+    <input type="email" id="email" placeholder="Email ID">
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="saveUser()">Continue</button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="success" class="card hidden">
+    <h2>🎉 Account Created</h2>
+    <p>You can now log in</p>
+    <button onclick="goToLogin()" >Go to Login</button>
+  </div>
+
+<!-- LOGIN FORM -->
+<div id="login" class="card hidden">
+     <button class="back-btn" onclick="goBack('step-otp')">← Back</button>
+  <h2>Login</h2>
+
+  <input type="email" id="loginEmail" placeholder="Email">
+  <input type="password" id="loginPassword" placeholder="Password">
+
+  <p id="login-msg"></p>
+
+  <button onclick="loginUser()">Login</button>
+</div>
+
+<!-- LOGIN SUCCESS -->
+<div id="login-success" class="card hidden">
+     <button class="back-btn" onclick="goBack('login')">← Back</button>
+  <h2 style="color:lime">✅ Login Successful</h2>
+  <a href="/dashboard" style="text-decoration: none;" class="btn">Go to Dashboard</a>
+</div>
+</div>
+
+<script>
+  console.log("script loaded");
+
+function openSignup() {
+  document.getElementById("landing").classList.add("hidden");
+  document.getElementById("step-mobile").classList.remove("hidden");
+}
+
+function openLogin() {
+  document.getElementById("landing").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+}
+const FIXED_OTP = "756924";
+
+function sendOTP() {
+  const mobile = document.getElementById("mobile").value;
+
+  if (mobile.length !== 10) {
+    alert("Enter valid 10-digit mobile number");
+    return;
+  }
+
+  document.getElementById("step-mobile").classList.add("hidden");
+  document.getElementById("step-otp").classList.remove("hidden");
+}
+
+function verifyOTP() {
+  const otp = document.getElementById("otp").value;
+  const msg = document.getElementById("otp-msg");
+
+  if (otp === FIXED_OTP) {
+    msg.textContent = "OTP Verified ✔";
+    msg.style.color = "lime";
+
+    setTimeout(() => {
+      document.getElementById("step-otp").classList.add("hidden");
+      document.getElementById("step-signup").classList.remove("hidden");
+    }, 1000);
+  } else {
+    msg.textContent = "Invalid OTP";
+    msg.style.color = "red";
+  }
+}
+
+function saveUser() {
+  const user = {
+    firstName: document.getElementById("fname").value,
+    lastName: document.getElementById("lname").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value
+  };
+
+  if (!user.firstName || !user.email || !user.password) {
+    alert("Fill all fields");
+    return;
+  }
+
+  localStorage.setItem("user", JSON.stringify(user));
+
+  document.getElementById("step-signup").classList.add("hidden");
+  document.getElementById("success").classList.remove("hidden");
+}
+function goToLogin() {
+  document.getElementById("success").classList.add("hidden");
+  document.getElementById("login").classList.remove("hidden");
+}
+
+function loginUser() {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+  const msg = document.getElementById("login-msg");
+
+  const savedUser = JSON.parse(localStorage.getItem("user"));
+
+  if (!savedUser) {
+    msg.textContent = "No user found. Please sign up.";
+    msg.style.color = "red";
+    return;
+  }
+
+  if (email === savedUser.email && password === savedUser.password) {
+    msg.textContent = "Login verified ✔";
+    msg.style.color = "lime";
+
+    setTimeout(() => {
+      document.getElementById("login").classList.add("hidden");
+      document.getElementById("login-success").classList.remove("hidden");
+    }, 1000);
+  } else {
+    msg.textContent = "Invalid email or password";
+    msg.style.color = "red";
+  }
+}
+localStorage.setItem("user", email);
+
+
+function goDashboard() {
+  alert("Redirecting to dashboard 🚀");
+  // window.location.href = "/dashboard.html";
+}
+function goBack(targetId) {
+  // hide all cards
+  document.querySelectorAll(".card").forEach(card => {
+    card.classList.add("hidden");
+  });
+
+  // show the target card
+  document.getElementById(targetId).classList.remove("hidden");
+}
+</script>
+</body>
+</html>

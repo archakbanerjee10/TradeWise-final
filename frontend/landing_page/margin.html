@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F&O margin calculator - Zerodha Margin Calculator</title>
+    <style>
+        :root {
+            --bg-main: #050914;
+            --bg-secondary: #0B1220;
+            --bg-card: #0E1628;
+            --bg-navbar: #060B18;
+
+            --accent-primary: #2DD4BF;
+            --accent-hover: #1FB6A8;
+
+            --text-primary: #E5E7EB;
+            --text-secondary: #9CA3AF;
+            --text-muted: #6B7280;
+
+            --border-subtle: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            color: #424242;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+
+        .logo h1 {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #387ed1;
+        }
+
+        .signup-btn {
+            background: #387ed1;
+            color: #fff !important;
+            padding: 8px 25px;
+            border-radius: 3px;
+        }
+
+        .signup-btn:hover {
+            background: #5599e8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #666;
+            font-size: 15px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #387ed1;
+        }
+
+        .tab.active {
+            color: #387ed1;
+            border-bottom-color: #387ed1;
+        }
+
+        .info-box {
+            background: #f5f9ff;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 3px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .info-box a {
+            color: #387ed1;
+            text-decoration: none;
+        }
+
+        .securities-ban {
+            background: #fff8e6;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+        }
+
+        .ban-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .ban-stock {
+            color: #d9534f;
+            font-weight: 600;
+        }
+
+        .strikes-info {
+            background: #e8f5e9;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .strikes-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-section {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input,
+        select {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #387ed1;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        input[type="radio"] {
+            width: auto;
+        }
+
+        .margin-results {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .margin-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .margin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .margin-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .margin-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .margin-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #424242;
+        }
+
+        .total-margin {
+            border-top: 2px solid #ddd;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .table-section {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            border-bottom: 2px solid #ddd;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .note-section {
+            background: #fffbf0;
+            padding: 20px;
+            border-left: 4px solid #ffc107;
+            margin-bottom: 30px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            background: #fafafa;
+            padding: 50px 30px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #666;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .footer-section a:hover {
+            color: #387ed1;
+        }
+
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+
+        .footer-logo img {
+            height: 18px;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .disclaimer {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 30px;
+            margin-top: 40px;
+            font-size: 11px;
+            color: #999;
+            line-height: 1.8;
+        }
+
+        .help-icon {
+            color: #387ed1;
+            cursor: help;
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .margin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .footer-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #387ed1;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 20% 100%);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            color: #f2f4f6;
+            letter-spacing: 0.5px;
+        }
+
+        .copyright {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #387ed1;
+        }
+
+        .social-icons svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .icon-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .terms {
+            display: flex;
+        }
+
+        .signup-container {
+            padding: 10px;
+            text-align: center;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+
+        }
+
+        body {
+            background: var(--bg-main);
+            color: var(--text-primary);
+        }
+
+        header {
+            background: var(--bg-navbar);
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: var(--accent-primary);
+            font-size: 20px;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            margin-left: 20px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            color: var(--accent-primary);
+        }
+
+        nav a.active {
+            color: #2DD4BF;
+        }
+
+
+        /* Navbar */
+        .navbar {
+            background: var(--bg-navbar);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .logo h1 {
+            color: var(--accent-primary);
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .signup-btn {
+            background: var(--accent-primary);
+        }
+
+        .signup-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Containers */
+        .container {
+            background: transparent;
+        }
+
+        /* Tabs */
+        .tabs {
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .tab {
+            color: var(--text-secondary);
+        }
+
+        .tab.active {
+            color: var(--accent-primary);
+            border-bottom-color: var(--accent-primary);
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .securities-ban {
+            background: #2a1f0d;
+        }
+
+        .strikes-info {
+            background: #0f2a22;
+            color: var(--text-secondary);
+        }
+
+        /* Cards / Sections */
+        .form-section,
+        .margin-results,
+        .table-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* Inputs */
+        input,
+        select {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Tables */
+        table {
+            background: var(--bg-card);
+        }
+
+        th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        td {
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* Margin values */
+        .margin-value {
+            color: var(--accent-primary);
+        }
+
+        /* Notes */
+        .note-section {
+            background: #1a1408;
+            border-left: 4px solid var(--accent-primary);
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .footer,
+        .terms {
+            background: var(--bg-navbar);
+        }
+
+        .logo-text {
+            color: var(--text-primary);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+        }
+
+        .social-icons a {
+            color: var(--text-secondary);
+        }
+
+        .social-icons a:hover {
+            color: var(--accent-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>TradeWise</h1>
+        <nav>
+            <a href="/home">Home</a>
+            <a class="active">Margin Calculator</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>F&O margin calculator</h1>
+
+        <div class="tabs">
+            <button class="tab active">F&O</button>
+            <button class="tab">Equity futures</button>
+            <button class="tab">Commodity</button>
+            <button class="tab">Currency</button>
+            <button class="tab">Equity</button>
+        </div>
+
+        <div class="info-box">
+            Read more about MIS and NRML product types <a href="#">here</a>.
+        </div>
+
+        <div class="securities-ban">
+            <div class="ban-title">Securities under ban</div>
+            <div class="ban-stock">BANDHANBNK</div>
+        </div>
+
+        <div class="strikes-info">
+            <div class="strikes-title">Bank Nifty contracts allowed for trading</div>
+            <div><strong>All strikes allowed</strong> <a href="#">More information</a></div>
+        </div>
+
+        <div class="strikes-info">
+            <div class="strikes-title">Nifty contracts allowed for trading</div>
+            <div><strong>All strikes allowed</strong></div>
+        </div>
+
+        <div class="strikes-info">
+            <div class="strikes-title">Finnifty contracts allowed for trading</div>
+            <div><strong>All strikes allowed</strong> <a href="#">More information</a></div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Exchange</label>
+                    <select id="exchange">
+                        <option value="NFO">NFO</option>
+                        <option value="BFO">BFO</option>
+                        <option value="MCX">MCX</option>
+                        <option value="CDS">CDS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Product</label>
+                    <select id="product">
+                        <option value="Futures">Futures</option>
+                        <option value="Options">Options</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Symbol</label>
+                    <input type="text" id="symbol" placeholder="Search symbol">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Option type</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="optionType" value="Calls" checked>
+                            <span>Calls</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="optionType" value="Puts">
+                            <span>Puts</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Strike price</label>
+                    <input type="text" id="strikePrice" placeholder="Enter strike price">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Net quantity (Lot size)</label>
+                    <input type="number" id="quantity" placeholder="Enter quantity">
+                </div>
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="position" value="Buy" checked>
+                            <span>Buy</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="position" value="Sell">
+                            <span>Sell</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="margin-results">
+            <div class="margin-title">Combined margin requirements</div>
+
+            <div class="margin-grid">
+                <div class="margin-item">
+                    <div class="margin-label">Span</div>
+                    <div class="margin-value">0</div>
+                </div>
+                <div class="margin-item">
+                    <div class="margin-label">Exposure margin</div>
+                    <div class="margin-value">0</div>
+                </div>
+                <div class="margin-item">
+                    <div class="margin-label">Spread benefit <a href="#" class="help-icon">?</a></div>
+                    <div class="margin-value">0</div>
+                </div>
+                <div class="margin-item">
+                    <div class="margin-label">Premium receivable <a href="#" class="help-icon">?</a></div>
+                    <div class="margin-value">0</div>
+                </div>
+            </div>
+
+            <div class="total-margin">
+                <span>Total margin <a href="#" class="help-icon">?</a></span>
+                <span>0</span>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <div class="table-title">Margin benefit</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exchange</th>
+                        <th>Contract</th>
+                        <th>Product</th>
+                        <th>Strike</th>
+                        <th>Qty</th>
+                        <th>Initial margin</th>
+                        <th>Exposure</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 30px; color: #999;">
+                            No positions added
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" style="font-weight: 600;">Total</td>
+                        <td style="font-weight: 600;">-</td>
+                        <td style="font-weight: 600;">-</td>
+                        <td style="font-weight: 600;">-</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="note-section">
+            <p>The TradeWise F&O calculator is the first online tool in India that let's you calculate comprehensive
+                margin requirements for option writing/shorting or for multi-leg F&O strategies while trading equity,
+                F&O, commodity and currency before taking a trade. No more taking trades just to figure out the margin
+                that will be blocked!</p>
+            <p style="margin-top: 15px;">The new SEBI circular mandates brokers to collect the complete SPAN + Exposure
+                margin to carry forward Futures and Options positions to the next day. Make sure to have sufficient
+                margins to avoid margin penalty and square off of open positions from today.
+            <p style="margin-top: 15px; font-size: 13px; color: #666;">*Buying options require full premium and not
+                margins. Hence premium values to buy options don't show up in the above F&O margin calculator. Adding
+                buying option positions might have margin benefits on futures and short option positions which will show
+                up above.</p>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // Form interaction
+        const productSelect = document.getElementById('product');
+        const optionTypeGroup = document.querySelector('.form-row:nth-child(2)');
+
+        productSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'Futures') {
+                optionTypeGroup.style.display = 'none';
+            } else {
+                optionTypeGroup.style.display = 'grid';
+            }
+        });
+    </script>
+    <section class="terms">
+        <div class="footer-container">
+            <div class="logo-section">
+
+                <div class="logo-text">TradeWise</div>
+            </div>
+
+            <p class="copyright">
+                © 2010 - 2025, TradeWise Broking Ltd.<br>
+                All rights reserved.
+            </p>
+
+            <div class="social-icons">
+                <div class="icon-row">
+                    <a href="#" aria-label="X (Twitter)">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="LinkedIn">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg>
+                    </a>
+                </div>
+                <div class="icon-row">
+                    <a href="#" aria-label="YouTube">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="WhatsApp">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+                        </svg>
+                    </a>
+                    <a href="#" aria-label="Telegram">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <p>TradeWise Broking Ltd.: Member of NSE, BSE​ &​ MCX – SEBI Registration no.: INZ000031633 CDSL/NSDL:
+            Depository services through Zerodha Broking Ltd. – SEBI Registration no.: IN-DP-431-2019 Registered Address:
+            Zerodha Broking Ltd., #153/154, 4th Cross, Dollars Colony, Opp. Clarence Public School, J.P Nagar 4th Phase,
+            Bengaluru - 560078, Karnataka, India. For any complaints pertaining to securities broking please write to
+            complaints@zerodha.com, for DP related to dp@zerodha.com. Please ensure you carefully read the Risk
+            Disclosure Document as prescribed by SEBI | ICF<br>
+
+            Procedure to file a complaint on SEBI SCORES: Register on SCORES portal. Mandatory details for filing
+            complaints on SCORES: Name, PAN, Address, Mobile Number, E-mail ID. Benefits: Effective Communication,
+            Speedy redressal of the grievances<br>
+
+            Smart Online Dispute Resolution | Grievances Redressal Mechanism<br>
+
+            Investments in securities market are subject to market risks; read all the related documents carefully
+            before investing.<br>
+
+            Attention investors: 1) Stock brokers can accept securities as margins from clients only by way of pledge in
+            the depository system w.e.f September 01, 2020. 2) Update your e-mail and phone number with your stock
+            broker / depository participant and receive OTP directly from depository on your e-mail and/or mobile number
+            to create pledge. 3) Check your securities / MF / bonds in the consolidated account statement issued by
+            NSDL/CDSL every month.<br>
+
+            India's largest broker based on networth as per NSE. NSE broker factsheet<br>
+
+            "Prevent unauthorised transactions in your account. Update your mobile numbers/email IDs with your stock
+            brokers. Receive information of your transactions directly from Exchange on your mobile/email at the end of
+            the day. Issued in the interest of investors. KYC is one time exercise while dealing in securities markets -
+            once KYC is done through a SEBI registered intermediary (broker, DP, Mutual Fund etc.), you need not undergo
+            the same process again when you approach another intermediary." Dear Investor, if you are subscribing to an
+            IPO, there is no need to issue a cheque. Please write the Bank account number and sign the IPO application
+            form to authorize your bank to make payment in case of allotment. In case of non allotment the funds will
+            remain in your bank account. As a business we don't give stock tips, and have not authorized anyone to trade
+            on behalf of others. If you find anyone claiming to be part of Zerodha and offering such services, please
+            create a ticket here.<br>
+
+            *Customers availing insurance advisory services offered by Ditto (Tacterial Consulting Private Limited |
+            IRDAI Registered Corporate Agent (Composite) License No CA0738) will not have access to the exchange
+            investor grievance redressal forum, SEBI SCORES/ODR, or arbitration mechanism for such products.</p>
+    </section>
+
+</body>
+
+</html>
