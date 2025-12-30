@@ -1,20 +1,20 @@
-📈 TradeWise – Stock Trading Dashboard (Hackathon Project)
+TradeWise – Stock Trading Dashboard (Hackathon Project)
 
 TradeWise is a full-stack stock trading dashboard developed by our team to simulate buying and selling assets, managing orders, tracking portfolio performance, and verifying financial news. The platform combines a clean UI, RESTful backend, and an AI-powered Credibility Engine to provide trustworthy financial insights.
 
-🚀 Features
+Features
 
-🔐 User Authentication (Login / Signup)
+User Authentication (Login / Signup)
 
-📊 Interactive Dashboard with portfolio overview
+Interactive Dashboard with portfolio overview
 
-📈 Watchlist displaying mock real-time stock prices
+ Watchlist displaying mock real-time stock prices
 
 🟢 Buy / 🔴 Sell stocks with order tracking
 
-🧾 Orders page (history of all Buy & Sell orders)
+ Orders page (history of all Buy & Sell orders)
 
-💼 Portfolio page
+ Portfolio page
 
 Holdings
 
@@ -26,23 +26,23 @@ Total P&L
 
 🧹 User-specific data handling (orders reset on logout)
 
-🤖 TruthLens AI – AI-Powered News Verification (Special Feature)
+ TruthLens AI – AI-Powered News Verification (Special Feature)
 
-Integrated AI-powered module called TruthLens AI to help users make informed trading decisions.
+Integrated an AI-powered module called TruthLens AI to help users make informed trading decisions.
 
-Allows searching any financial topic or company such as Bitcoin, Tesla, or interest rate changes.
+Allows searching any financial topic or company, such as Bitcoin, Tesla, or interest rate changes.
 
 Displays for each news article:
 
-📰 Headline
+ Headline
 
-🌐 Source
+ Source
 
-📅 Publication Date
+ Publication Date
 
-📊 Sentiment Analysis (Bullish / Bearish / Neutral)
+ Sentiment Analysis (Bullish / Bearish / Neutral)
 
-✅ Trust Score (reliability indicator)
+ Trust Score (reliability indicator)
 
 Clearly labels sentiment, helping users quickly understand market impact without reading multiple articles.
 
@@ -136,7 +136,7 @@ Orders appear on the Orders page
 
 Portfolio updates automatically
 
-🔐 Logout Handling
+ Logout Handling
 
 User session is cleared
 
@@ -152,7 +152,7 @@ Frontend: Netlify / Vercel
 
 Fully deployment-ready with REST API and static frontend
 
-🧪 Kiro IDE Usage
+ Kiro IDE Usage
 
 Kiro IDE was used for:
 
@@ -164,7 +164,7 @@ Frontend testing
 
 Overall development workflow
 
-🎯 Hackathon Scope (MVP)
+ Hackathon Scope (MVP)
 
 Focused on core functionality & UX
 
@@ -208,3 +208,4 @@ Practical backend usage
 Hackathon-ready deployment
 
 AI-powered news verification for reliable trading insights
+
